@@ -1,0 +1,22 @@
+name: PersonalWarp
+main: com.github.risen619.Main
+version: 1.0.0
+commands:
+    pwarp:
+        description: Teleports you to warp location.
+        usage: /<command> <name>
+    pwarps:
+        description: Lists all public warps.
+        usage: /<command>
+    pmywarps: 
+        description: Lists all your warps.
+        usage: /<command>
+    psetwarp:
+        description: Sets warp.
+        usage: /<command> <name> [private|public]
+    pdelwarp:
+        description: Deletes warp.
+        usage: /<command> <name>
+    paddmember:
+        description: Adds member to your warp.
+        usage: /<command> <name> <player>
