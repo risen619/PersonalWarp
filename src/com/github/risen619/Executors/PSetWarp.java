@@ -1,7 +1,7 @@
 package com.github.risen619.Executors;
 
-import com.github.risen619.Warp;
 import com.github.risen619.WarpsManager;
+import com.github.risen619.Models.WarpModel;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,7 +31,7 @@ public class PSetWarp implements CommandExecutor
 			if(!visibility.equalsIgnoreCase("private") && !visibility.equalsIgnoreCase("public")) return false;
 		}
         else visibility = "private";
-        Warp w = new Warp(
+        WarpModel w = new WarpModel(
             name,
             wm.getUserIdByUUID(p.getUniqueId().toString()),
             (visibility.equalsIgnoreCase("private") ? false : true),

@@ -5,16 +5,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.github.risen619.Executors.PSetWarp;
 import com.github.risen619.Executors.PWarp;
 import com.github.risen619.Executors.PWarps;
+import com.github.risen619.Executors.PAddMember;
 import com.github.risen619.Executors.PMyWarps;
 
 public class Main extends JavaPlugin
 {
-	public PMyWarps pwpExec = new PMyWarps();
-	public PWarps pwarpsExec = new PWarps();
-	public PWarp pwarpExec = new PWarp();
-	public PSetWarp psetWarpExec = new PSetWarp();
+	private PMyWarps pwpExec = new PMyWarps();
+	private PWarps pwarpsExec = new PWarps();
+	private PWarp pwarpExec = new PWarp();
+	private PSetWarp psetWarpExec = new PSetWarp();
+	private PAddMember paddMemberExec = new PAddMember();
 	
-	public WarpsManager wm;
+	private WarpsManager wm;
 	
 	@Override
 	public void onEnable()
@@ -24,6 +26,7 @@ public class Main extends JavaPlugin
 		getCommand("pwarps").setExecutor(pwarpsExec);
 		getCommand("pwarp").setExecutor(pwarpExec);
 		getCommand("psetwarp").setExecutor(psetWarpExec);
+		getCommand("paddmember").setExecutor(paddMemberExec);
 		wm = WarpsManager.getInstance();
 		getLogger().info("PersonalWarp enabled.");
 	}

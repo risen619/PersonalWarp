@@ -1,29 +1,29 @@
-package com.github.risen619;
+package com.github.risen619.Models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Location;
-
 import com.github.risen619.Database.DatabaseCompatible;
 
-public class Warp implements DatabaseCompatible
+public class WarpModel implements DatabaseCompatible
 {
-	private int id;
-	private String name;
+	protected int id;
+	protected String name;
 	private int owner;
-	private boolean isPublic;
-	private Location location;
+	protected boolean isPublic;
 	private String world;
 	private int x;
 	private int y;
 	private int z;
 	
-	public Warp(String name, int owner, boolean isPublic, String world, int x, int y, int z) { this(-1, name, owner, isPublic, world, x, y, z); }
+	protected WarpModel() {}
+	
+	public WarpModel(String name, int owner, boolean isPublic, String world, int x, int y, int z)
+	{ this(-1, name, owner, isPublic, world, x, y, z); }
 
-	private Warp(int id, String name, int owner, boolean isPublic, String world, int x, int y, int z)
+	private WarpModel(int id, String name, int owner, boolean isPublic, String world, int x, int y, int z)
 	{
 		this.id = id;
 		this.name = name;
@@ -33,18 +33,23 @@ public class Warp implements DatabaseCompatible
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.location = new Location(WarpsManager.getServer().getWorld(world), x, y, z);
 	}
 	
-	public boolean getIsPublic() { return isPublic; }
+	public int getId() { return id; }
 	public String getName() { return name; }
-	public int getOwner() { return owner; }
+	public boolean getIsPublic() { return isPublic; }
+	
+	protected int getOwnerId() { return owner; }
+	protected int getX() { return x; }
+	protected int getY() { return y; }
+	protected int getZ() { return z; }
+	protected String getWorld() { return world; }
 	
 	@Override
 	public String toString()
 	{
 		return String.format("%s: %s (%s) located at %d;%d;%d", owner, name,
-			(isPublic ? "public" : "private"), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+			(isPublic ? "public" : "private"), x, y, z);
 	}
 	
 	public static String createTableSQL() 
@@ -81,12 +86,11 @@ public class Warp implements DatabaseCompatible
 				String name = rs.getString("name");
 				Integer owner = rs.getInt("owner");
 				Boolean isPublic = rs.getBoolean("isPublic");
-				System.out.println("IS_PUBLIC " + isPublic);
 				String world = rs.getString("world");
 				Integer x = rs.getInt("x");
 				Integer y = rs.getInt("y");
 				Integer z = rs.getInt("z");
-				warps.add(new Warp(id, name, owner, isPublic, world, x, y, z));
+				warps.add(new WarpModel(id, name, owner, isPublic, world, x, y, z));
 			}
 		}
 		catch (SQLException e) { e.printStackTrace(); }

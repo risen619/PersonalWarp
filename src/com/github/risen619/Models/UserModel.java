@@ -1,4 +1,4 @@
-package com.github.risen619;
+package com.github.risen619.Models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,15 +7,17 @@ import java.util.List;
 
 import com.github.risen619.Database.DatabaseCompatible;
 
-public class User implements DatabaseCompatible
+public class UserModel implements DatabaseCompatible
 {
-	private int id;
-	private String name;
-	private String uuid;
-	
-	public User(String name, String uuid) { this(-1, name, uuid); }
+	protected int id;
+	protected String name;
+	protected String uuid;
 
-	private User(int id, String name, String uuid)
+	protected UserModel() {}
+	
+	public UserModel(String name, String uuid) { this(-1, name, uuid); }
+
+	private UserModel(int id, String name, String uuid)
 	{
 		this.id = id;
 		this.name = name;
@@ -60,7 +62,7 @@ public class User implements DatabaseCompatible
 				Integer id = rs.getInt("id");
 				String name = rs.getString("name");
 				String uuid = rs.getString("uuid");
-				users.add(new User(id, name, uuid));
+				users.add(new UserModel(id, name, uuid));
 			}
 		}
 		catch (SQLException e) { e.printStackTrace(); }

@@ -6,8 +6,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.github.risen619.Warp;
 import com.github.risen619.WarpsManager;
+import com.github.risen619.Models.Warp;
 
 public class PWarps implements CommandExecutor
 {
