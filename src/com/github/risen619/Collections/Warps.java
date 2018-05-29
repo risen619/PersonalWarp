@@ -29,6 +29,15 @@ public class Warps extends PersonalWarpsCollections
 		List<DatabaseCompatible> dcs = dm.select(WarpModel.selectFromTableSQL(), rs -> WarpModel.fromResultSet(rs));
 		warps = dcs.stream().map(dc -> new Warp((WarpModel)dc)).collect(Collectors.toList());
 	}
+
+	public void refresh() { fetchWarps(); }
+	public void refresh(int id)
+	{
+		warps.removeIf(w -> w.getId() == id);
+		List<DatabaseCompatible> dcs = dm.select(String.format("select * from Warps where Warps.id=%d;", id),
+			rs -> WarpModel.fromResultSet(rs));
+		warps.addAll(dcs.stream().map(dc -> new Warp((WarpModel)dc)).collect(Collectors.toList()));
+	}
 	
 	public List<Warp> getPublic()
 	{
@@ -42,6 +51,15 @@ public class Warps extends PersonalWarpsCollections
 		if(warps == null)
 			fetchWarps();
 		return warps.stream().filter(w -> w.getOwner().getId() == id).collect(Collectors.toList());
+	}
+	
+	public List<Warp> getByMemberUUID(String uuid)
+	{
+		if(warps == null)
+			fetchWarps();
+		return warps.stream().filter(w -> {
+			return w.getMembers().stream().anyMatch(m -> m.getUUID().equals(uuid));
+		}).collect(Collectors.toList());
 	}
 	
 	public Warp getByName(String name)
@@ -65,13 +83,7 @@ public class Warps extends PersonalWarpsCollections
 	{
 		if(w == null) return;
 		dm.insert(w);
-		warps.add(
-			new Warp((WarpModel)dm.select(
-				String.format("select * from Warps where Warps.name=\"%s\"", w.getName()), 
-				rs -> WarpModel.fromResultSet(rs)
-			)
-			.get(0))
-		);
+		fetchWarps();
 	}
 	
 }

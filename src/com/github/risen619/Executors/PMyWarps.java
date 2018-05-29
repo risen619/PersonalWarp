@@ -18,10 +18,12 @@ public class PMyWarps implements CommandExecutor
 		Player p = (Player)s;
 		WarpsManager wm = WarpsManager.getInstance();
 		List<Warp> warps = wm.getMyWarps(p.getUniqueId().toString());
-		if(warps == null)
+		warps.addAll(wm.getWarpsByMemberUUID(p.getUniqueId().toString()));
+		if(warps == null || warps.isEmpty())
 			p.sendMessage("You don't have any warps");
 		else
-			p.sendMessage(warps.stream().map(w -> new String(w.getName())).toArray(String[]::new));
+			p.sendMessage(warps.stream().map(w -> String.format("%s, Owner: %s", w.getName(), w.getOwner().getName()))
+				.toArray(String[]::new));
 		return true;
 	}
 

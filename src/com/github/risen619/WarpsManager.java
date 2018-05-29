@@ -77,7 +77,6 @@ public class WarpsManager
 	public void addWarp(WarpModel w) { warps.add(w); }
 	public List<Warp> getPublicWarps()
 	{
-		System.out.println("WARPS: " + warps);
 		return warps.getPublic();
 	}
 	public boolean uuidCanUseWarp(String uuid, String warpName) throws NullPointerException
@@ -90,12 +89,15 @@ public class WarpsManager
 	}
 	
 	public List<Warp> getMyWarps(String uuid) { return warps.getByOwnerId(users.getByUUID(uuid).getId()); }
+	public List<Warp> getWarpsByMemberUUID(String uuid) { return warps.getByMemberUUID(uuid); }
 	public Warp getWarpByName(String name) { return warps.getByName(name); }
 	
 	public void addMemberToWarp(String userUUID, String warpName)
 	{
+		int warpId = warps.getByName(warpName).getId();
 		userWarps.add(new UserWarpModel(
-			users.getByUUID(userUUID).getId(), warps.getByName(warpName).getId()
+			users.getByUUID(userUUID).getId(), warpId
 		));
+		warps.refresh(warpId);
 	}
 }

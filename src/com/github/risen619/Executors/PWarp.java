@@ -17,9 +17,9 @@ public class PWarp implements CommandExecutor
 		Player p = (Player)s;
 		try
 		{
-			if(wm.uuidCanUseWarp(p.getUniqueId().toString(), args[1]))
+			if(wm.uuidCanUseWarp(p.getUniqueId().toString(), args[0]))
 				p.sendMessage("I will teleport you later...");
-			p.sendMessage("You don't have access to this warp");
+			else p.sendMessage("You don't have access to this warp");
 		}
 		catch(NullPointerException e) { p.sendMessage(e.getMessage()); }
 		return true;

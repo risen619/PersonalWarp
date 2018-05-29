@@ -8,4 +8,14 @@ public class User extends UserModel
 		name = user.name;
 		uuid = user.uuid;
 	}
+	
+	public int getId() { return id; }
+	public String getName() { return name; }
+	public String getUUID() { return uuid; }
+	
+	@Override
+	public String toString()
+	{
+		return String.format("%d: %s - %s", id, name, uuid);
+	}
 }

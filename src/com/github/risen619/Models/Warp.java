@@ -25,7 +25,14 @@ public class Warp extends WarpModel
 		members = wm.getMembersForWarp(id);
 	}
 	
+	public int getId() { return id; }
 	public User getOwner() { return owner; }
 	public Location getLocation() { return location; }
 	public List<User> getMembers() { return members; }
+	
+	@Override
+	public String toString()
+	{
+		return String.format("%d: %s - %s located in " + getLocation(), id, name, owner.getName());
+	}
 }

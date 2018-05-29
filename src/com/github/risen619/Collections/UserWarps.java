@@ -30,6 +30,15 @@ public class UserWarps extends PersonalWarpsCollections
 		userWarps = dcs.stream().map(dc -> ((UserWarpModel)dc)).collect(Collectors.toList());
 	}
 	
+	public void refresh() { fetchUserWarps(); }
+	public void refresh(int id)
+	{
+		userWarps.removeIf(w -> w.getId() == id);
+		List<DatabaseCompatible> dcs = dm.select(String.format("select * from UserWarps where UserWarps.id=%d;", id),
+			rs -> UserWarpModel.fromResultSet(rs));
+		userWarps.addAll(dcs.stream().map(dc -> (UserWarpModel)dc).collect(Collectors.toList()));
+	}
+	
 	public List<UserWarpModel> getMembersOfWarp(int warpId)
 	{
 		if(userWarps == null)
@@ -48,13 +57,6 @@ public class UserWarps extends PersonalWarpsCollections
 	{
 		if(w == null) return;
 		dm.insert(w);
-		userWarps.add(
-			(UserWarpModel)dm.select(
-				String.format("select * from UserWarps where UserWarps.user=%d & UserWarps.warp=%d;",
-					w.getUser(), w.getWarp()), 
-				rs -> UserWarpModel.fromResultSet(rs)
-			)
-			.get(0)
-		);
+		fetchUserWarps();
 	}
 }
