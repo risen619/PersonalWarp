@@ -20,7 +20,7 @@ public class PSetWarp implements CommandExecutor
 		String name = args[0];
 		if(wm.warpExists(name))
 		{
-			p.sendMessage("Warp with such name already exists");
+			wm.sendError(p, "Warp with such name already exists");
 			return true;
 		}
 		String visibility = "";
@@ -40,7 +40,7 @@ public class PSetWarp implements CommandExecutor
         );
         wm.addWarp(w);
 
-        s.sendMessage(w.toString());
+        wm.sendSuccess(p, String.format("Warp %s (%s) created!", w.getName(), visibility));
         
         return true;
 	}

@@ -20,10 +20,12 @@ public class PMyWarps implements CommandExecutor
 		List<Warp> warps = wm.getMyWarps(p.getUniqueId().toString());
 		warps.addAll(wm.getWarpsByMemberUUID(p.getUniqueId().toString()));
 		if(warps == null || warps.isEmpty())
-			p.sendMessage("You don't have any warps");
+			wm.sendError(p, "You don't have any warps");
 		else
-			p.sendMessage(warps.stream().map(w -> String.format("%s, Owner: %s", w.getName(), w.getOwner().getName()))
-				.toArray(String[]::new));
+			wm.sendInformation(p,
+				warps.stream().map(w -> String.format("%s, Owner: %s", w.getName(), w.getOwner().getName()))
+				.toArray(String[]::new)
+			);
 		return true;
 	}
 

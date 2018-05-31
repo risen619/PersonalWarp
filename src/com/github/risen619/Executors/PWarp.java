@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.risen619.WarpsManager;
+import com.github.risen619.Models.Warp;
 
 public class PWarp implements CommandExecutor
 {
@@ -18,10 +19,17 @@ public class PWarp implements CommandExecutor
 		try
 		{
 			if(wm.uuidCanUseWarp(p.getUniqueId().toString(), args[0]))
-				p.sendMessage("I will teleport you later...");
-			else p.sendMessage("You don't have access to this warp");
+			{
+				Warp w = wm.getWarpByName(args[0]);
+				/* First take World from Warp object, then check for highest block 
+				 * in warp location, then take block's location
+				 * */
+				p.teleport(w.getLocation().getWorld().getHighestBlockAt(w.getLocation()).getLocation());
+				wm.sendSuccess(p, "I will teleport you later...");
+			}
+			else wm.sendError(p, "You don't have access to this warp");
 		}
-		catch(NullPointerException e) { p.sendMessage(e.getMessage()); }
+		catch(NullPointerException e) { wm.sendError(p, e.getMessage()); }
 		return true;
 	}
 

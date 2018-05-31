@@ -1,9 +1,12 @@
 package com.github.risen619;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 import com.github.risen619.Collections.PersonalWarpsCollections;
 import com.github.risen619.Collections.UserWarps;
@@ -57,6 +60,26 @@ public class WarpsManager
 	
 	public void closeDb() { dm.closeConnection(); }
 	
+	private void sendColorfulMessage(Player p, String message, ChatColor color) { p.sendMessage(color + message); }
+	private void sendColorfulMessage(Player p, String[] message, ChatColor color)
+	{
+		for(int i=0; i<message.length; i++)
+			message[i] = color + message[i];
+		p.sendMessage(message);
+	}
+	
+	public void sendError(Player p, String message) { sendColorfulMessage(p, message, ChatColor.RED); }
+	public void sendError(Player p, String[] message) { sendColorfulMessage(p, message, ChatColor.RED); }
+	
+	public void sendWarning(Player p, String message) { sendColorfulMessage(p, message, ChatColor.GOLD); }
+	public void sendWarning(Player p, String[] message) { sendColorfulMessage(p, message, ChatColor.GOLD); }
+	
+	public void sendSuccess(Player p, String message) { sendColorfulMessage(p, message, ChatColor.GREEN); }
+	public void sendSuccess(Player p, String[] message) { sendColorfulMessage(p, message, ChatColor.GREEN); }
+
+	public void sendInformatoin(Player p, String message) { sendColorfulMessage(p, message, ChatColor.WHITE); }
+	public void sendInformation(Player p, String[] message) { sendColorfulMessage(p, message, ChatColor.WHITE); }
+	
 	public void addUser(UserModel u) { users.add(u); }
 	public User getUserByID(int id) { return new User(users.getByID(id)); };
 	public int getUserIdByUUID(String uuid) { return users.getByUUID(uuid).getId(); }
@@ -85,7 +108,8 @@ public class WarpsManager
 		Warp warp = warps.getByName(warpName);
 		if(warp == null)
 			throw new NullPointerException("Warp with such name does not exist");
-		return warp.getMembers().stream().anyMatch(m -> m.getUUID().equals(uuid));
+		return warp.getOwner().getUUID().equals(uuid) || 
+				warp.getMembers().stream().anyMatch(m -> m.getUUID().equals(uuid));
 	}
 	
 	public List<Warp> getMyWarps(String uuid) { return warps.getByOwnerId(users.getByUUID(uuid).getId()); }
@@ -99,5 +123,6 @@ public class WarpsManager
 			users.getByUUID(userUUID).getId(), warpId
 		));
 		warps.refresh(warpId);
+		sendSuccess(server.getPlayer(UUID.fromString(userUUID)), "You have been granted access to warp " + warpName);
 	}
 }

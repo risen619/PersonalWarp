@@ -44,25 +44,25 @@ public class PAddMember implements CommandExecutor
 		
 		if(playerName.equalsIgnoreCase(p.getName()))
 		{
-			p.sendMessage("You cannot add yourself as a member");
+			wm.sendError(p, "You cannot add yourself as a member");
 			return true;
 		}
 		
 		if(!warpValid(warpName))
 		{
-			p.sendMessage("Warp with such name does not exists");
+			wm.sendError(p, "Warp with such name does not exists");
 			return true;
 		}
 		
 		if(wm.getWarpByName(warpName).getIsPublic())
 		{
-			p.sendMessage("You cannot add members to public warp");
+			wm.sendError(p, "You cannot add members to public warp");
 			return true;
 		}
 		
 		if(!playerValid(playerName))
 		{
-			p.sendMessage("Player with such name is not online");
+			wm.sendError(p, "Player with such name is not online");
 			return true;
 		}
 		
