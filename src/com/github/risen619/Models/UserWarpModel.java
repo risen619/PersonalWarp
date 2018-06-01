@@ -30,7 +30,11 @@ public class UserWarpModel implements DatabaseCompatible
 		return "create table if not exists UserWarps (" + 
 				" id integer primary key autoincrement," + 
 				" user integer not null," + 
-				" warp integer not null" + 
+				" warp integer not null," + 
+				" constraint fk_warps " + 
+				"    foreign key (warp)" + 
+				"    references Warps(id)" + 
+				"    on delete cascade" +
 		"); create unique index if not exists UserWarps_UserWarp on UserWarps(user, warp);";
 	}
 

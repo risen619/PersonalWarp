@@ -62,7 +62,11 @@ public class WarpModel implements DatabaseCompatible
 				" world text not null," +
 				" x integer not null," + 
 				" y integer not null," + 
-				" z integer not null" + 
+				" z integer not null," +
+				" constraint fk_users" + 
+				"    foreign key (owner)" +
+				"    references Users(id)" +
+				"    on delete cascade" +
 		"); create unique index if not exists Warps_Name on Warps(name);";
 	}
 

@@ -72,6 +72,13 @@ public class Warps extends PersonalWarpsCollections
 		return ws.get(0);
 	}
 	
+	public void delete(int id)
+	{
+		dm.delete(String.format("delete from Warps where Warps.id=%d;", id));
+		fetchWarps();
+		UserWarps.getInstance().refresh();
+	}
+	
 	public boolean exists(String name)
 	{
 		if(warps == null)

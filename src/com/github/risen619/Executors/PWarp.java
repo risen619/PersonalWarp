@@ -25,7 +25,6 @@ public class PWarp implements CommandExecutor
 				 * in warp location, then take block's location
 				 * */
 				p.teleport(w.getLocation().getWorld().getHighestBlockAt(w.getLocation()).getLocation());
-				wm.sendSuccess(p, "I will teleport you later...");
 			}
 			else wm.sendError(p, "You don't have access to this warp");
 		}

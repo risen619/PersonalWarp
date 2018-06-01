@@ -116,6 +116,12 @@ public class WarpsManager
 	public List<Warp> getWarpsByMemberUUID(String uuid) { return warps.getByMemberUUID(uuid); }
 	public Warp getWarpByName(String name) { return warps.getByName(name); }
 	
+	public void deleteWarpByName(String name)
+	{
+		Warp w = getWarpByName(name);
+		warps.delete(w.getId());
+	}
+	
 	public void addMemberToWarp(String userUUID, String warpName)
 	{
 		int warpId = warps.getByName(warpName).getId();

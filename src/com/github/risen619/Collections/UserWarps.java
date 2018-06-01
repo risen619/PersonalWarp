@@ -46,6 +46,12 @@ public class UserWarps extends PersonalWarpsCollections
 		return userWarps.stream().filter(w -> w.getWarp() == warpId).collect(Collectors.toList());
 	}
 	
+	public void deleteWarpWithId(int id)
+	{
+		dm.delete(String.format("delete * from UserWarps where UserWarps.warp=%d;", id));
+		fetchUserWarps();
+	}
+	
 	public boolean exists(int user, int warp)
 	{
 		if(userWarps == null)

@@ -17,8 +17,15 @@ public class PWarps implements CommandExecutor
 	{
 		WarpsManager wm = WarpsManager.getInstance();
 		List<Warp> warps = wm.getPublicWarps();
+		if(warps.isEmpty())
+		{
+			wm.sendWarning((Player)s, "There are no public warps!");
+			return true;
+		}
 		wm.sendInformation((Player)s,
-			warps.stream().map(w -> new String(w.getName())).toArray(String[]::new)
+			warps.stream()
+			.map(w -> String.format("%s, Owner: %s", w.getName(), w.getOwner().getName()))
+			.toArray(String[]::new)
 		);
 		return true;
 	}
