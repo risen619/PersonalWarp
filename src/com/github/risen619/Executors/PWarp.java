@@ -1,6 +1,5 @@
 package com.github.risen619.Executors;
 
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,11 +21,7 @@ public class PWarp implements CommandExecutor
 			if(wm.uuidCanUseWarp(p.getUniqueId().toString(), args[0]))
 			{
 				Warp w = wm.getWarpByName(args[0]);
-				/* First take World from Warp object, then check for highest block 
-				 * in warp location, then take block's location
-				 * */
-				Block blockToTp = w.getLocation().getWorld().getHighestBlockAt(w.getLocation());
-				p.teleport(blockToTp.getLocation());
+				p.teleport(w.getLocation());
 			}
 			else wm.sendError(p, "You don't have access to this warp");
 		}

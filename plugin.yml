@@ -5,18 +5,24 @@ commands:
     pwarp:
         description: Teleports you to warp location.
         usage: /<command> <name>
+        aliases: [p]
     pwarps:
         description: Lists all public warps.
         usage: /<command>
+        aliases: [pall]
     pmywarps: 
         description: Lists all your warps.
         usage: /<command>
+        aliases: [pmy]
     psetwarp:
         description: Sets warp.
         usage: /<command> <name> [private|public]
+        aliases: [pset]
     pdelwarp:
         description: Deletes warp.
         usage: /<command> <name>
+        aliases: [pdel]
     paddmember:
         description: Adds member to your warp.
         usage: /<command> <name> <player>
+        aliases: [padd]
