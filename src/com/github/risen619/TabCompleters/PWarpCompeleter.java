@@ -10,6 +10,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import com.github.risen619.WarpsManager;
+import com.github.risen619.Models.Warp;
 
 public class PWarpCompeleter implements TabCompleter {
 
@@ -21,12 +22,10 @@ public class PWarpCompeleter implements TabCompleter {
 		Player p = (Player)s;
 		WarpsManager wm = WarpsManager.getInstance();
 		
-		List<String> warps = wm.getMyWarps(p.getUniqueId().toString()).stream()
-		.map(v -> v.getName()).collect(Collectors.toList());
-		warps.addAll(wm.getPublicWarps().stream().map(v -> v.getName()).collect(Collectors.toList()));
-		warps = warps.stream().distinct().sorted().collect(Collectors.toList());
+		List<Warp> warps = wm.getMyWarps(p.getUniqueId().toString());
+		warps.addAll(wm.getWarpsByMemberUUID(p.getUniqueId().toString()));
 		
-		return warps;
+		return warps.stream().map(v -> v.getName()).distinct().sorted().collect(Collectors.toList());
 	}
 
 }
