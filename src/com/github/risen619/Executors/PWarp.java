@@ -40,7 +40,7 @@ public class PWarp implements CommandExecutor
 			{
 				if(wm.uuidCanUseWarp(p.getUniqueId().toString(), args[0]))
 					wm.teleport(p, w);
-				else wm.sendError(p, "You don't have access to this warp");
+				else wm.sendError(p, "You don't have access to this warp!");
 			}
 			else wm.teleport(p, w);
 		}

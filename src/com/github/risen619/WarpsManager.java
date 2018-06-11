@@ -134,7 +134,16 @@ public class WarpsManager
 	
 	public void teleport(Player p, Warp w)
 	{
-		p.teleport(w.getLocation());
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try { Thread.sleep(500); }
+				catch (InterruptedException e) { e.printStackTrace(); }
+				finally { p.teleport(w.getLocation()); }
+			}
+		}).start();
 	}
 	
 }

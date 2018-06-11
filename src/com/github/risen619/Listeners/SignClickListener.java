@@ -50,22 +50,26 @@ public class SignClickListener implements Listener
 	@EventHandler
 	public void onSignClick(PlayerInteractEvent e)
 	{
+		if(e == null || e.getClickedBlock() == null) return;
+		if(e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+		
 		Block b = e.getClickedBlock();
-		if(b == null || b.getType() != Material.SIGN && b.getType() != Material.SIGN_POST &&
-			e.getAction() != Action.RIGHT_CLICK_BLOCK)
-			return;
+		if(b.getType() != Material.SIGN_POST && b.getType() != Material.WALL_SIGN) return;
 
-		Sign sign = (Sign)b.getState();
-		
-		if(!ChatColor.stripColor(sign.getLine(0)).equals("[WARP]")) return;
-		
-		WarpsManager wm = WarpsManager.getInstance();
-		String warpName = ChatColor.stripColor(sign.getLine(1));
-		String accessibleBy = ChatColor.stripColor(sign.getLine(3));
-		
-		if(!wm.warpExists(warpName)) return;
-		
-		Warp warp = wm.getWarpByName(warpName);
-		checkOwner(accessibleBy, warp, e.getPlayer());
+		if(b.getState() instanceof Sign)
+		{
+			Sign sign = (Sign)b.getState();
+			
+			if(!ChatColor.stripColor(sign.getLine(0)).equals("[WARP]")) return;
+			
+			WarpsManager wm = WarpsManager.getInstance();
+			String warpName = ChatColor.stripColor(sign.getLine(1));
+			String accessibleBy = ChatColor.stripColor(sign.getLine(3));
+			
+			if(!wm.warpExists(warpName)) return;
+			
+			Warp warp = wm.getWarpByName(warpName);
+			checkOwner(accessibleBy, warp, e.getPlayer());
+		}
 	}
 }
