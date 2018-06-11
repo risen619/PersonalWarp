@@ -131,4 +131,10 @@ public class WarpsManager
 		warps.refresh(warpId);
 		sendSuccess(server.getPlayer(UUID.fromString(userUUID)), "You have been granted access to warp " + warpName);
 	}
+	
+	public void teleport(Player p, Warp w)
+	{
+		p.teleport(w.getLocation());
+	}
+	
 }

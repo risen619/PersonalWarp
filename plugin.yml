@@ -4,7 +4,7 @@ version: 1.0.0
 commands:
     pwarp:
         description: Teleports you to warp location.
-        usage: /<command> <name>
+        usage: /<command> <name> <player>
         aliases: [p]
     pwarps:
         description: Lists all public warps.
@@ -26,3 +26,7 @@ commands:
         description: Adds member to your warp.
         usage: /<command> <name> <player>
         aliases: [padd]
+    psign:
+        description: Gives you clickable sign, which will teleport you to your warp.
+        usage: /<command> <name> [owner|members|all]
+        aliases: [ps]

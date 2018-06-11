@@ -17,7 +17,8 @@ public class PWarpCompeleter implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender s, Command c, String l, String[] args)
 	{
-		if(args.length > 1) return new ArrayList<String>();
+		if(args.length > 2) return new ArrayList<String>();
+		if(args.length == 2) return null;
 		
 		Player p = (Player)s;
 		WarpsManager wm = WarpsManager.getInstance();
