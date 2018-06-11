@@ -134,14 +134,14 @@ public class WarpsManager
 	
 	public void teleport(Player p, Warp w)
 	{
-		if(!w.getLocation().getChunk().isLoaded())
-			w.getLocation().getChunk().load();
-		
 		new Thread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				if(!w.getLocation().getChunk().isLoaded())
+					w.getLocation().getChunk().load();
+				
 				try { Thread.sleep(500); }
 				catch (InterruptedException e) { e.printStackTrace(); }
 				finally { p.teleport(w.getLocation()); }

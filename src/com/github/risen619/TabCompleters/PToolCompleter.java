@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.github.risen619.WarpsManager;
 
-public class PSignCompleter implements TabCompleter {
+public class PToolCompleter implements TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender s, Command c, String argl, String[] args)

@@ -3,15 +3,15 @@ package com.github.risen619;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.risen619.Executors.PSetWarp;
-import com.github.risen619.Executors.PSign;
+import com.github.risen619.Executors.PTool;
 import com.github.risen619.Executors.PWarp;
 import com.github.risen619.Executors.PWarps;
 import com.github.risen619.Listeners.BlockPlaceListener;
-import com.github.risen619.Listeners.SignClickListener;
+import com.github.risen619.Listeners.TeleporterClickListenerer;
 import com.github.risen619.TabCompleters.PAddMemberCompleter;
 import com.github.risen619.TabCompleters.PDelWarpCompleter;
 import com.github.risen619.TabCompleters.PSetWarpCompleter;
-import com.github.risen619.TabCompleters.PSignCompleter;
+import com.github.risen619.TabCompleters.PToolCompleter;
 import com.github.risen619.TabCompleters.PWarpCompeleter;
 import com.github.risen619.Executors.PAddMember;
 import com.github.risen619.Executors.PDelWarp;
@@ -42,11 +42,11 @@ public class Main extends JavaPlugin
 		getCommand("pdelwarp").setExecutor(new PDelWarp());
 		getCommand("pdelwarp").setTabCompleter(new PDelWarpCompleter());
 		
-		getCommand("psign").setExecutor(new PSign());
-		getCommand("psign").setTabCompleter(new PSignCompleter());
+		getCommand("psign").setExecutor(new PTool());
+		getCommand("psign").setTabCompleter(new PToolCompleter());
 		
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
-		getServer().getPluginManager().registerEvents(new SignClickListener(), this);
+		getServer().getPluginManager().registerEvents(new TeleporterClickListenerer(), this);
 		
 		wm = WarpsManager.getInstance();
 		getLogger().info("PersonalWarp enabled.");
