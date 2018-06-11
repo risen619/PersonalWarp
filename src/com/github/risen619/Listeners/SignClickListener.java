@@ -1,7 +1,6 @@
 package com.github.risen619.Listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -54,17 +53,18 @@ public class SignClickListener implements Listener
 		if(e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 		
 		Block b = e.getClickedBlock();
+		
+		if(!b.hasMetadata("warp")) return;
 		if(b.getType() != Material.SIGN_POST && b.getType() != Material.WALL_SIGN) return;
 
 		if(b.getState() instanceof Sign)
 		{
-			Sign sign = (Sign)b.getState();
-			
-			if(!ChatColor.stripColor(sign.getLine(0)).equals("[WARP]")) return;
-			
 			WarpsManager wm = WarpsManager.getInstance();
-			String warpName = ChatColor.stripColor(sign.getLine(1));
-			String accessibleBy = ChatColor.stripColor(sign.getLine(3));
+			
+			String metadata = b.getMetadata("warp").get(0).asString();
+			metadata = metadata.replaceAll("[\\[\\]]", "");
+			String warpName = metadata.split("/")[0];
+			String accessibleBy = metadata.split("/")[1];
 			
 			if(!wm.warpExists(warpName)) return;
 			

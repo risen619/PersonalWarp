@@ -51,6 +51,7 @@ public class PSign implements CommandExecutor
 		lore.add(args[0] + "/" + accessibleBy);
 		ItemMeta im = is.getItemMeta();
 		im.setLore(lore);
+		im.setDisplayName("[WARP]");
 		
 		is.setItemMeta(im);
 		p.getInventory().addItem(is);
