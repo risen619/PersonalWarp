@@ -19,8 +19,8 @@ public class TeleporterClickListenerer implements Listener
 	{
 		WarpsManager wm = WarpsManager.getInstance();
 		if(
-			accessibleBy.equals("owner") && !warp.getOwner().getUUID().equals(p.getUniqueId().toString()) ||
-			!wm.uuidCanUseWarp(p.getUniqueId().toString(), warp.getName())
+			accessibleBy.equals("owner") && !warp.owner().uuid().equals(p.getUniqueId().toString()) ||
+			!wm.uuidCanUseWarp(p.getUniqueId().toString(), warp.name())
 		)
 		{
 			wm.sendError(p, "You don't have access to this warp!");
@@ -41,7 +41,7 @@ public class TeleporterClickListenerer implements Listener
 	
 	private void checkMembers(String accessibleBy, Warp warp, Player p)
 	{
-		Bukkit.dispatchCommand(p, "pwarp " + warp.getName());
+		Bukkit.dispatchCommand(p, "pwarp " + warp.name());
 	}
 	
 	@EventHandler

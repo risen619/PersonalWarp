@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.risen619.Database.DatabaseCompatible;
+import com.github.risen619.Models.User;
 import com.github.risen619.Models.UserWarpModel;
 
 public class UserWarps extends PersonalWarpsCollections
@@ -25,8 +26,7 @@ public class UserWarps extends PersonalWarpsCollections
 	
 	private void fetchUserWarps()
 	{
-		List<DatabaseCompatible> dcs = dm.select(UserWarpModel.selectFromTableSQL(),
-			rs -> UserWarpModel.fromResultSet(rs));
+		List<DatabaseCompatible> dcs = dm.select(UserWarpModel.class);
 		userWarps = dcs.stream().map(dc -> ((UserWarpModel)dc)).collect(Collectors.toList());
 	}
 	
@@ -34,8 +34,7 @@ public class UserWarps extends PersonalWarpsCollections
 	public void refresh(int id)
 	{
 		userWarps.removeIf(w -> w.getId() == id);
-		List<DatabaseCompatible> dcs = dm.select(String.format("select * from UserWarps where UserWarps.id=%d;", id),
-			rs -> UserWarpModel.fromResultSet(rs));
+		List<DatabaseCompatible> dcs = dm.selectBy(User.class, String.format("UserWarps.id=%d;", id));
 		userWarps.addAll(dcs.stream().map(dc -> (UserWarpModel)dc).collect(Collectors.toList()));
 	}
 	

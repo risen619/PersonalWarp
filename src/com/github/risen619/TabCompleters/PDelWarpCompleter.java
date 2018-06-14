@@ -22,7 +22,7 @@ public class PDelWarpCompleter implements TabCompleter
 		Player p = (Player)s;
 		WarpsManager wm = WarpsManager.getInstance();
 		List<String> warps = wm.getMyWarps(p.getUniqueId().toString()).stream()
-		.map(v -> v.getName()).sorted().collect(Collectors.toList());
+		.map(v -> v.name()).sorted().collect(Collectors.toList());
 		
 		return warps;
 	}

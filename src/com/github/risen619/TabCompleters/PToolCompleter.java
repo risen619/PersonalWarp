@@ -20,7 +20,7 @@ public class PToolCompleter implements TabCompleter {
 		WarpsManager wm = WarpsManager.getInstance();
 		Player p = (Player)s;
 		if(args.length == 1)
-			return wm.getMyWarps(p.getUniqueId().toString()).stream().map(v -> v.getName()).collect(Collectors.toList());
+			return wm.getMyWarps(p.getUniqueId().toString()).stream().map(v -> v.name()).collect(Collectors.toList());
 		if(args.length == 2)
 			return new ArrayList<String>(Arrays.asList(new String[] { "owner", "members", "all" }));
 		

@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import com.github.risen619.Database.DatabaseCompatible;
 import com.github.risen619.Models.Warp;
-import com.github.risen619.Models.WarpModel;
 
 public class Warps extends PersonalWarpsCollections
 {
@@ -26,31 +25,30 @@ public class Warps extends PersonalWarpsCollections
 	
 	private void fetchWarps()
 	{
-		List<DatabaseCompatible> dcs = dm.select(WarpModel.selectFromTableSQL(), rs -> WarpModel.fromResultSet(rs));
-		warps = dcs.stream().map(dc -> new Warp((WarpModel)dc)).collect(Collectors.toList());
+		List<DatabaseCompatible> dcs = dm.select(Warp.class);
+		warps = dcs.stream().map(dc -> (Warp)dc).collect(Collectors.toList());
 	}
 
 	public void refresh() { fetchWarps(); }
 	public void refresh(int id)
 	{
-		warps.removeIf(w -> w.getId() == id);
-		List<DatabaseCompatible> dcs = dm.select(String.format("select * from Warps where Warps.id=%d;", id),
-			rs -> WarpModel.fromResultSet(rs));
-		warps.addAll(dcs.stream().map(dc -> new Warp((WarpModel)dc)).collect(Collectors.toList()));
+		warps.removeIf(w -> w.id() == id);
+		List<DatabaseCompatible> dcs = dm.selectBy(Warp.class, String.format("Warps.id=%d;", id));
+		warps.addAll(dcs.stream().map(dc -> (Warp)dc).collect(Collectors.toList()));
 	}
 	
 	public List<Warp> getPublic()
 	{
 		if(warps == null)
 			fetchWarps();
-		return warps.stream().filter(w -> w.getIsPublic()).collect(Collectors.toList());
+		return warps.stream().filter(w -> w.isPublic()).collect(Collectors.toList());
 	}
 	
 	public List<Warp> getByOwnerId(int id)
 	{
 		if(warps == null)
 			fetchWarps();
-		return warps.stream().filter(w -> w.getOwner().getId() == id).collect(Collectors.toList());
+		return warps.stream().filter(w -> w.owner().id() == id).collect(Collectors.toList());
 	}
 	
 	public List<Warp> getByMemberUUID(String uuid)
@@ -58,7 +56,7 @@ public class Warps extends PersonalWarpsCollections
 		if(warps == null)
 			fetchWarps();
 		return warps.stream().filter(w -> {
-			return w.getMembers().stream().anyMatch(m -> m.getUUID().equals(uuid));
+			return w.members().stream().anyMatch(m -> m.uuid().equals(uuid));
 		}).collect(Collectors.toList());
 	}
 	
@@ -66,7 +64,7 @@ public class Warps extends PersonalWarpsCollections
 	{
 		if(warps == null)
 			fetchWarps();
-		List<Warp> ws = warps.stream().filter(w -> w.getName().equalsIgnoreCase(name))
+		List<Warp> ws = warps.stream().filter(w -> w.name().equalsIgnoreCase(name))
 			.limit(1).collect(Collectors.toList());
 		if(ws == null || ws.size() == 0) return null;
 		return ws.get(0);
@@ -83,12 +81,13 @@ public class Warps extends PersonalWarpsCollections
 	{
 		if(warps == null)
 			fetchWarps();
-		return warps.stream().anyMatch(w -> w.getName().equalsIgnoreCase(name));
+		return warps.stream().anyMatch(w -> w.name().equalsIgnoreCase(name));
 	}
 	
-	public void add(WarpModel w)
+	public void add(Warp w)
 	{
 		if(w == null) return;
+		System.out.println("WARP: " + w.toString());
 		dm.insert(w);
 		fetchWarps();
 	}

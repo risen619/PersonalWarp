@@ -24,7 +24,7 @@ public class PWarps implements CommandExecutor
 		}
 		wm.sendInformation((Player)s,
 			warps.stream()
-			.map(w -> String.format("%s, Owner: %s", w.getName(), w.getOwner().getName()))
+			.map(w -> String.format("%s, Owner: %s", w.name(), w.owner().name()))
 			.toArray(String[]::new)
 		);
 		return true;

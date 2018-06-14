@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -23,9 +24,10 @@ public class DatabaseManager
 			e.printStackTrace();
 			return;
 		}
-		System.out.println("Connection with database " + this.dbPath + " is established");
 	}
 
+	public Connection connection() { return connection; }
+	
 	public void closeConnection()
 	{
 		try { this.connection.close(); }
@@ -38,7 +40,17 @@ public class DatabaseManager
 		System.out.println("Connection with " + this.dbPath + " closed");
 	}
 
-	public List<DatabaseCompatible> executeQuery(String sql, Function<ResultSet, List<DatabaseCompatible>> processor)
+	synchronized public ResultSet executeQuery(String sql)
+	{
+		try(Statement s = connection.createStatement())
+		{
+			ResultSet rs = s.executeQuery(sql);
+			return rs;
+		}
+		catch(SQLException e) { e.printStackTrace(); return null; }
+	}
+	
+	synchronized public List<DatabaseCompatible> executeQuery(String sql, Function<ResultSet, List<DatabaseCompatible>> processor)
 	{
 		try(Statement s = connection.createStatement())
 		{
@@ -48,19 +60,16 @@ public class DatabaseManager
 		catch(SQLException e) { e.printStackTrace(); return null; }
 	}
 	
-	public void executeUpdate(String sql)
+	synchronized public void executeUpdate(String sql)
 	{
 		try(Statement s = connection.createStatement()) { s.executeUpdate(sql); }
 		catch(SQLException e) { e.printStackTrace(); }
 	}
 	
-	public void createTable(Class<?> c)
+	synchronized public void createTable(Class<?> c)
 	{
 		String createQuery = SqlHelpers.create(c);
 		String uniqueQuery = SqlHelpers.unique(c);
-		
-		System.out.println("CREATE:" + createQuery);
-		System.out.println("UNIQUE:" + uniqueQuery);
 		
 		executeUpdate(createQuery + uniqueQuery);
 	}
@@ -69,8 +78,6 @@ public class DatabaseManager
 	{
 		String truncateQuery = SqlHelpers.truncate(c);
 		
-		System.out.println("TRUNCATE:" + truncateQuery);
-		
 		executeUpdate(truncateQuery);
 	}
 	
@@ -78,28 +85,56 @@ public class DatabaseManager
 	{
 		String dropQuery = SqlHelpers.drop(c);
 		
-		System.out.println("DROP:" + dropQuery);
-		
 		executeUpdate(dropQuery);
 	}
 	
-	public List<DatabaseCompatible> select(Class<?> c, Function<ResultSet, List<DatabaseCompatible>> processor)
-	{
-		String selectQuery = SqlHelpers.select(c);
-		
-		System.out.println("SELECT:" + selectQuery);
-		
-		return executeQuery(selectQuery, processor);
+	public List<DatabaseCompatible> select(Class<? extends DatabaseCompatible> c)
+	{		
+		try
+		{
+			DatabaseCompatible dc = c.newInstance();
+			Statement s;
+			try
+			{
+				s = connection.createStatement();
+				ResultSet rs = s.executeQuery(SqlHelpers.select(c));
+				return dc.fromResultSet(rs);
+			}
+			catch (SQLException e) {}
+		}
+		catch (InstantiationException | IllegalAccessException e) {}
+		return new ArrayList<DatabaseCompatible>();
 	}
 	
-	@Deprecated
-	synchronized public void createTable(String sql) { executeUpdate(sql); }
+	public List<DatabaseCompatible> select(Class<? extends DatabaseCompatible> c, Function<ResultSet, List<DatabaseCompatible>> processor)
+	{
+		try(Statement s = connection.createStatement())
+		{
+			ResultSet rs = s.executeQuery(SqlHelpers.select(c));
+			return processor.apply(rs);
+		}
+		catch (SQLException e) {}
+		return new ArrayList<DatabaseCompatible>();
+	}
 	
-	@Deprecated
-	public void truncateTable(String sql) { executeUpdate(sql); };
-	
-	@Deprecated
-	public void dropTable(String sql) { executeUpdate(sql); }
+	public List<DatabaseCompatible> selectBy(Class<? extends DatabaseCompatible> c, String clause)
+	{
+		String selectQuery = SqlHelpers.select(c).replaceAll(";", "") + " where " + clause;
+		try
+		{
+			DatabaseCompatible dc = c.newInstance();
+			Statement s;
+			try
+			{
+				s = connection.createStatement();
+				ResultSet rs = s.executeQuery(selectQuery);
+				return dc.fromResultSet(rs);
+			}
+			catch (SQLException e) {}
+		}
+		catch (InstantiationException | IllegalAccessException e) {}
+		return new ArrayList<DatabaseCompatible>();
+	}
 	
 	public void insert(String sql) { executeUpdate(sql); }
 	public void insert(DatabaseCompatible dc) { executeUpdate(dc.insertIntoTableSQL()); }

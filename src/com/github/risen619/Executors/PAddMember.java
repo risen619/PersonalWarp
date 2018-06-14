@@ -54,7 +54,7 @@ public class PAddMember implements CommandExecutor
 			return true;
 		}
 		
-		if(wm.getWarpByName(warpName).getIsPublic())
+		if(wm.getWarpByName(warpName).isPublic())
 		{
 			wm.sendError(p, "You cannot add members to public warp");
 			return true;

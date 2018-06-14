@@ -27,6 +27,7 @@ public class UserWarpModel implements DatabaseCompatible
 	@TableField(name = "warp", type = "integer")
 	private int warp;
 	
+	public UserWarpModel() { }
 	public UserWarpModel(int user, int warp) { this(-1, user, warp); }
 	public UserWarpModel(int id, int user, int warp)
 	{
@@ -65,7 +66,7 @@ public class UserWarpModel implements DatabaseCompatible
 	public static String selectFromTableSQL()
 	{ return "select * from UserWarps;"; }
 	
-	public static List<DatabaseCompatible> fromResultSet(ResultSet rs)
+	public List<DatabaseCompatible> fromResultSet(ResultSet rs)
 	{
 		List<DatabaseCompatible> recs = new ArrayList<>();
 		try

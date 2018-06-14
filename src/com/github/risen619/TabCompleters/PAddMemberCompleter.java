@@ -26,7 +26,7 @@ public class PAddMemberCompleter implements TabCompleter
 		
 		if(args.length == 1)
 			warps = wm.getMyWarps(p.getUniqueId().toString())
-			.stream().map(v -> v.getName()).sorted().collect(Collectors.toList());
+			.stream().map(v -> v.name()).sorted().collect(Collectors.toList());
 		
 		return warps;
 	}

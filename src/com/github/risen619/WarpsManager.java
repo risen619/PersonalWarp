@@ -14,10 +14,8 @@ import com.github.risen619.Collections.Users;
 import com.github.risen619.Collections.Warps;
 import com.github.risen619.Database.DatabaseManager;
 import com.github.risen619.Models.User;
-import com.github.risen619.Models.UserModel;
 import com.github.risen619.Models.UserWarpModel;
 import com.github.risen619.Models.Warp;
-import com.github.risen619.Models.WarpModel;
 
 public class WarpsManager
 {
@@ -34,9 +32,9 @@ public class WarpsManager
 	private void setup()
 	{
 		dm = new DatabaseManager("plugins/personalWarps.sqlite");
-		
-		dm.createTable(UserModel.class);
-		dm.createTable(WarpModel.class);
+
+		dm.createTable(User.class);
+		dm.createTable(Warp.class);
 		dm.createTable(UserWarpModel.class);
 		
 		PersonalWarpsCollections.setDatabaseManager(dm);
@@ -77,9 +75,9 @@ public class WarpsManager
 	public void sendInformatoin(Player p, String message) { sendColorfulMessage(p, message, ChatColor.WHITE); }
 	public void sendInformation(Player p, String[] message) { sendColorfulMessage(p, message, ChatColor.WHITE); }
 	
-	public void addUser(UserModel u) { users.add(u); }
-	public User getUserByID(int id) { return new User(users.getByID(id)); };
-	public int getUserIdByUUID(String uuid) { return users.getByUUID(uuid).getId(); }
+	public void addUser(User u) { users.add(u); }
+	public User getUserByID(int id) { return users.getByID(id); };
+	public int getUserIdByUUID(String uuid) { return users.getByUUID(uuid).id(); }
 	public List<User> getMembersForWarp(int id)
 	{
 		return userWarps.getMembersOfWarp(id).stream()
@@ -91,10 +89,10 @@ public class WarpsManager
 	
 	public boolean isWarpPublic(String name)
 	{
-		return getPublicWarps().stream().anyMatch(w -> w.getName().equalsIgnoreCase(name) && w.getIsPublic());
+		return getPublicWarps().stream().anyMatch(w -> w.name().equalsIgnoreCase(name) && w.isPublic());
 	}
 	public boolean warpExists(String name) { return warps.exists(name); }
-	public void addWarp(WarpModel w) { warps.add(w); }
+	public void addWarp(Warp w) { warps.add(w); }
 	public List<Warp> getPublicWarps()
 	{
 		return warps.getPublic();
@@ -105,25 +103,25 @@ public class WarpsManager
 		Warp warp = warps.getByName(warpName);
 		if(warp == null)
 			throw new NullPointerException("Warp with such name does not exist");
-		return warp.getOwner().getUUID().equals(uuid) || 
-				warp.getMembers().stream().anyMatch(m -> m.getUUID().equals(uuid));
+		return warp.owner().uuid().equals(uuid) || 
+				warp.members().stream().anyMatch(m -> m.uuid().equals(uuid));
 	}
 	
-	public List<Warp> getMyWarps(String uuid) { return warps.getByOwnerId(users.getByUUID(uuid).getId()); }
+	public List<Warp> getMyWarps(String uuid) { return warps.getByOwnerId(users.getByUUID(uuid).id()); }
 	public List<Warp> getWarpsByMemberUUID(String uuid) { return warps.getByMemberUUID(uuid); }
 	public Warp getWarpByName(String name) { return warps.getByName(name); }
 	
 	public void deleteWarpByName(String name)
 	{
 		Warp w = getWarpByName(name);
-		warps.delete(w.getId());
+		warps.delete(w.id());
 	}
 	
 	public void addMemberToWarp(String userUUID, String warpName)
 	{
-		int warpId = warps.getByName(warpName).getId();
+		int warpId = warps.getByName(warpName).id();
 		userWarps.add(new UserWarpModel(
-			users.getByUUID(userUUID).getId(), warpId
+			users.getByUUID(userUUID).id(), warpId
 		));
 		warps.refresh(warpId);
 		sendSuccess(server.getPlayer(UUID.fromString(userUUID)), "You have been granted access to warp " + warpName);
@@ -136,12 +134,12 @@ public class WarpsManager
 			@Override
 			public void run()
 			{
-				if(!w.getLocation().getChunk().isLoaded())
-					w.getLocation().getChunk().load();
+				if(!w.location().getChunk().isLoaded())
+					w.location().getChunk().load();
 				
 				try { Thread.sleep(500); }
 				catch (InterruptedException e) { e.printStackTrace(); }
-				finally { p.teleport(w.getLocation()); }
+				finally { p.teleport(w.location()); }
 			}
 		}).start();
 	}

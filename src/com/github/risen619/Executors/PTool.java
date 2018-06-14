@@ -42,7 +42,7 @@ public class PTool implements CommandExecutor
 			accessibleBy = args[1];
 		}
 		Warp warp = wm.getWarpByName(args[0]);
-		if(!p.getUniqueId().toString().equals(warp.getOwner().getUUID()))
+		if(!p.getUniqueId().toString().equals(warp.owner().uuid()))
 		{
 			wm.sendError(p, "You don't have access to this warp!");
 			return true;

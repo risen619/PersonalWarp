@@ -23,7 +23,7 @@ public class PMyWarps implements CommandExecutor
 			wm.sendError(p, "You don't have any warps");
 		else
 			wm.sendInformation(p,
-				warps.stream().map(w -> String.format("%s, Owner: %s", w.getName(), w.getOwner().getName()))
+				warps.stream().map(w -> String.format("%s, Owner: %s", w.name(), w.owner().name()))
 				.toArray(String[]::new)
 			);
 		return true;
