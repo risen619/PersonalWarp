@@ -6,14 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.risen619.Database.DatabaseCompatible;
+import com.github.risen619.Database.PrimaryKey;
+import com.github.risen619.Database.Table;
+import com.github.risen619.Database.TableField;
 
+@Table(tableName = "Users")
 public class UserModel implements DatabaseCompatible
 {
+	@PrimaryKey
+	@TableField(name = "id", type = "integer")
 	protected int id;
+	
+	@TableField(name = "name", type = "text", unique = true)
 	protected String name;
+	
+	@TableField(name = "uuid", type = "text", unique = true)
 	protected String uuid;
 
-	protected UserModel() {}
+	protected UserModel() { }
 	
 	public UserModel(String name, String uuid) { this(-1, name, uuid); }
 
@@ -24,16 +34,24 @@ public class UserModel implements DatabaseCompatible
 		this.uuid = uuid;
 	}
 	
+	public int id() { return id; }
+	public String uuid() { return uuid; }
+	public String name() { return name; }
+
+	@Override
+	public String toString() { return String.format("%d: %s - %s", id, name, uuid); }
+	
+	@Deprecated
 	public int getId() { return id; }
+	
+	@Deprecated
 	public String getUUID() { return uuid; }
+	
+	@Deprecated
 	public String getName() { return name; }
 	
-	@Override
-	public String toString()
-	{
-		return String.format("%s | %s", uuid, name);
-	}
 	
+	@Deprecated
 	public static String createTableSQL() 
 	{
 		return "create table if not exists Users (" + 
@@ -43,12 +61,15 @@ public class UserModel implements DatabaseCompatible
 		"); create unique index if not exists Users_Name on Users(name, uuid);";
 	}
 
+	@Deprecated
 	public static String dropTableSQL()
 	{ return "drop table if exists Users;"; }
 	
+	@Deprecated
 	public static String truncateTableSQL()
 	{ return "delete from Users;"; }
 	
+	@Deprecated
 	public static String selectFromTableSQL()
 	{ return "select * from Users;"; }
 	

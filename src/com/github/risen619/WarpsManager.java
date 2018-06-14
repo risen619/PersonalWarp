@@ -29,18 +29,15 @@ public class WarpsManager
 	private Users users;
 	private UserWarps userWarps;
 	
-	private WarpsManager()
-	{
-		System.out.println("WM GET INSTANCE");
-	}
+	private WarpsManager() { }
 	
 	private void setup()
 	{
 		dm = new DatabaseManager("plugins/personalWarps.sqlite");
 		
-		dm.createTable(WarpModel.createTableSQL());
-		dm.createTable(UserModel.createTableSQL());
-		dm.createTable(UserWarpModel.createTableSQL());
+		dm.createTable(UserModel.class);
+		dm.createTable(WarpModel.class);
+		dm.createTable(UserWarpModel.class);
 		
 		PersonalWarpsCollections.setDatabaseManager(dm);
 		users = Users.getInstance();

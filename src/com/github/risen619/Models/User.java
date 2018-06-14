@@ -1,5 +1,6 @@
 package com.github.risen619.Models;
 
+@Deprecated
 public class User extends UserModel
 {	
 	public User(UserModel user)

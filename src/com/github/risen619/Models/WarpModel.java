@@ -6,16 +6,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.risen619.Database.DatabaseCompatible;
+import com.github.risen619.Database.ForeignKey;
+import com.github.risen619.Database.PrimaryKey;
+import com.github.risen619.Database.Table;
+import com.github.risen619.Database.TableField;
+import com.github.risen619.Database.ForeignKey.Action;
 
+@Table(tableName = "Warps")
 public class WarpModel implements DatabaseCompatible
 {
+	@PrimaryKey
+	@TableField(name = "id", type = "integer")
 	protected int id;
+	
+	@TableField(name = "name", type = "text", unique = true)
 	protected String name;
+
+	@ForeignKey(refTable = "Users", onDelete = Action.CASCADE, onUpdate = Action.CASCADE)
+	@TableField(name = "owner", type = "integer")
 	private int owner;
+
+	@TableField(name = "isPublic", type = "boolean")
 	protected boolean isPublic;
+	
+	@TableField(name = "location", type="text")
+	private String location;
+	
+	@Deprecated
 	private String world;
+	@Deprecated
 	private int x;
+	@Deprecated
 	private int y;
+	@Deprecated
 	private int z;
 	
 	protected WarpModel() {}
@@ -52,6 +75,7 @@ public class WarpModel implements DatabaseCompatible
 			(isPublic ? "public" : "private"), x, y, z);
 	}
 	
+	@Deprecated
 	public static String createTableSQL() 
 	{
 		return "create table if not exists Warps (" + 
@@ -70,12 +94,15 @@ public class WarpModel implements DatabaseCompatible
 		"); create unique index if not exists Warps_Name on Warps(name);";
 	}
 
+	@Deprecated
 	public static String dropTableSQL()
 	{ return "drop table if exists Warps;"; }
-	
+
+	@Deprecated
 	public static String truncateTableSQL()
 	{ return "delete from Warps;"; }
-	
+
+	@Deprecated
 	public static String selectFromTableSQL()
 	{ return "select * from Warps;"; }
 	

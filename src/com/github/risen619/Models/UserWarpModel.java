@@ -6,11 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.risen619.Database.DatabaseCompatible;
+import com.github.risen619.Database.ForeignKey;
+import com.github.risen619.Database.PrimaryKey;
+import com.github.risen619.Database.Table;
+import com.github.risen619.Database.TableField;
+import com.github.risen619.Database.ForeignKey.Action;
 
+@Table(tableName = "UserWarps")
 public class UserWarpModel implements DatabaseCompatible
 {
+	@PrimaryKey
+	@TableField(name = "id", type = "integer")
 	private int id;
+
+	@ForeignKey(refTable = "Users", onDelete = Action.CASCADE, onUpdate = Action.CASCADE)
+	@TableField(name = "user", type = "integer")
 	private int user;
+
+	@ForeignKey(refTable = "Warps", onDelete = Action.CASCADE, onUpdate = Action.CASCADE)
+	@TableField(name = "warp", type = "integer")
 	private int warp;
 	
 	public UserWarpModel(int user, int warp) { this(-1, user, warp); }
@@ -25,6 +39,7 @@ public class UserWarpModel implements DatabaseCompatible
 	public int getUser() { return user; }
 	public int getWarp() { return warp; }
 
+	@Deprecated
 	public static String createTableSQL() 
 	{
 		return "create table if not exists UserWarps (" + 
@@ -38,12 +53,15 @@ public class UserWarpModel implements DatabaseCompatible
 		"); create unique index if not exists UserWarps_UserWarp on UserWarps(user, warp);";
 	}
 
+	@Deprecated
 	public static String dropTableSQL()
 	{ return "drop table if exists UserWarps;"; }
-	
+
+	@Deprecated
 	public static String truncateTableSQL()
 	{ return "delete from UserWarps;"; }
-	
+
+	@Deprecated
 	public static String selectFromTableSQL()
 	{ return "select * from UserWarps;"; }
 	
