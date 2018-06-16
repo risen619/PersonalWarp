@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.bukkit.Location;
 
-import com.github.risen619.Main;
 import com.github.risen619.WarpsManager;
 import com.github.risen619.Database.DatabaseCompatible;
 import com.github.risen619.Database.ForeignKey;
@@ -48,7 +47,7 @@ public class Warp implements DatabaseCompatible
 	public Warp(String name, int owner, boolean isPublic, Location loc)
 	{
 		this(name, owner, isPublic, (String)null);
-		this.loc = serializeLocation(loc);
+		this.loc = ModelHelpers.serializeLocation(loc);
 		this.location = loc;
 	}
 	
@@ -70,7 +69,7 @@ public class Warp implements DatabaseCompatible
 		this.loc = loc;
 		
 		this.owner = WarpsManager.getInstance().getUserByID(_owner);
-		this.location = deserializeLocation(loc);
+		this.location = ModelHelpers.deserializeLocation(loc);
 		this.members = WarpsManager.getInstance().getMembersForWarp(id);
 	}
 	
@@ -80,28 +79,6 @@ public class Warp implements DatabaseCompatible
 	public User owner() { return owner; }
 	public Location location() { return location; }
 	public List<User> members() { return members; }
-	
-	public static String serializeLocation(Location l)
-	{
-		return String.format("%s;%f;%f;%f;%f;%f", l.getWorld().getName(), l.getX(), l.getY(), l.getZ(),
-			l.getYaw(), l.getPitch());
-	}
-	
-	public static Location deserializeLocation(String l)
-	{
-		if(l == null) return null;
-		String world;
-		double x, y, z;
-		float yaw, pitch;
-		String[] parts = l.split(";");
-		world = parts[0];
-		x = Double.parseDouble(parts[1]);
-		y = Double.parseDouble(parts[2]);
-		z = Double.parseDouble(parts[3]);
-		yaw = Float.parseFloat(parts[4]);
-		pitch = Float.parseFloat(parts[5]);
-		return new Location(Main.getPlugin(Main.class).getServer().getWorld(world), x, y, z, yaw, pitch);
-	}
 	
 	@Override
 	public String toString()

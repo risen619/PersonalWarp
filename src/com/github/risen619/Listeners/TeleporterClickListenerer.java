@@ -18,10 +18,7 @@ public class TeleporterClickListenerer implements Listener
 	private void checkOwner(String accessibleBy, Warp warp, Player p)
 	{
 		WarpsManager wm = WarpsManager.getInstance();
-		if(
-			accessibleBy.equals("owner") && !warp.owner().uuid().equals(p.getUniqueId().toString()) ||
-			!wm.uuidCanUseWarp(p.getUniqueId().toString(), warp.name())
-		)
+		if(accessibleBy.equals("owner") && !warp.owner().uuid().equals(p.getUniqueId().toString()))
 		{
 			wm.sendError(p, "You don't have access to this warp!");
 			return;
@@ -57,6 +54,7 @@ public class TeleporterClickListenerer implements Listener
 		WarpsManager wm = WarpsManager.getInstance();
 		
 		String metadata = b.getMetadata("warp").get(0).asString();
+		System.out.println("METADATA: " + metadata);
 		metadata = metadata.replaceAll("[\\[\\]]", "");
 		String warpName = metadata.split("/")[0];
 		String accessibleBy = metadata.split("/")[1];

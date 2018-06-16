@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.github.risen619.Main;
+import com.github.risen619.WarpsManager;
 
 public class BlockPlaceListener implements Listener
 {
@@ -22,6 +23,7 @@ public class BlockPlaceListener implements Listener
 		if(meta == null) return;
 		
 		Block placed = e.getBlockPlaced();
-		placed.setMetadata("warp", new FixedMetadataValue(Main.getPlugin(Main.class), meta.getLore()));
+		placed.setMetadata("warp", new FixedMetadataValue(Main.getPlugin(Main.class), meta.getLore().get(0)));
+		WarpsManager.getInstance().addTeleporter(placed.getLocation(), meta.getLore().get(0));
 	}
 }

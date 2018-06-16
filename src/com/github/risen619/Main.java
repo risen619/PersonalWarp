@@ -7,6 +7,7 @@ import com.github.risen619.Executors.PTool;
 import com.github.risen619.Executors.PWarp;
 import com.github.risen619.Executors.PWarps;
 import com.github.risen619.Listeners.BlockPlaceListener;
+import com.github.risen619.Listeners.DestroyTeleporterListener;
 import com.github.risen619.Listeners.TeleporterClickListenerer;
 import com.github.risen619.TabCompleters.PAddMemberCompleter;
 import com.github.risen619.TabCompleters.PDelWarpCompleter;
@@ -47,6 +48,7 @@ public class Main extends JavaPlugin
 		
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
 		getServer().getPluginManager().registerEvents(new TeleporterClickListenerer(), this);
+		getServer().getPluginManager().registerEvents(new DestroyTeleporterListener(), this);
 		
 		wm = WarpsManager.getInstance();
 		getLogger().info("PersonalWarp enabled.");

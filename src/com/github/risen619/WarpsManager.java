@@ -5,14 +5,19 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.github.risen619.Collections.PersonalWarpsCollections;
 import com.github.risen619.Collections.UserWarps;
 import com.github.risen619.Collections.Users;
 import com.github.risen619.Collections.Warps;
 import com.github.risen619.Database.DatabaseManager;
+import com.github.risen619.Models.ModelHelpers;
+import com.github.risen619.Models.Teleporter;
 import com.github.risen619.Models.User;
 import com.github.risen619.Models.UserWarpModel;
 import com.github.risen619.Models.Warp;
@@ -36,11 +41,14 @@ public class WarpsManager
 		dm.createTable(User.class);
 		dm.createTable(Warp.class);
 		dm.createTable(UserWarpModel.class);
+		dm.createTable(Teleporter.class);
 		
 		PersonalWarpsCollections.setDatabaseManager(dm);
 		users = Users.getInstance();
 		userWarps = UserWarps.getInstance();
 		warps = Warps.getInstance();
+		
+		setupTeleporters();
 	}
 	
 	synchronized public static WarpsManager getInstance()
@@ -125,6 +133,40 @@ public class WarpsManager
 		));
 		warps.refresh(warpId);
 		sendSuccess(server.getPlayer(UUID.fromString(userUUID)), "You have been granted access to warp " + warpName);
+	}
+	
+	public void setupTeleporters()
+	{
+		String ids = "";
+		List<Teleporter> tps = dm.select(Teleporter.class).stream().map(v -> (Teleporter)v).collect(Collectors.toList());
+		
+		for(Teleporter tp : tps)
+		{
+			Location l = ModelHelpers.deserializeLocation(tp.location());
+			if(l.getBlock().getType() == Material.AIR || !warpExists(tp.metadata().split("/")[0]))
+				ids += tp.id() + ",";
+			else
+				l.getBlock().setMetadata("warp", new FixedMetadataValue(Main.getPlugin(Main.class), tp.metadata()));
+		}
+		
+		if(!ids.isEmpty())
+		{
+			ids = ids.substring(0,ids.length()-1);
+			String query = "delete from Teleporters where Teleporters.id in ("+ids+");";
+			dm.delete(query);
+		}
+	}
+	
+	public void addTeleporter(Location l, String metadata)
+	{
+		Teleporter t = new Teleporter(ModelHelpers.serializeLocation(l), metadata);
+		dm.insert(t);
+	}
+	
+	public void deleteTeleporter(Location l)
+	{
+		dm.delete(String.format("delete from Teleporters where Teleporters.location like \"%s\";",
+			ModelHelpers.serializeLocation(l)));
 	}
 	
 	public void teleport(Player p, Warp w)

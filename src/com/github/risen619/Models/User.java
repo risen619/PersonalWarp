@@ -51,7 +51,6 @@ public class User implements DatabaseCompatible
 				Integer id = rs.getInt("id");
 				String name = rs.getString("name");
 				String uuid = rs.getString("uuid");
-				System.out.println(String.format("id=%d name=%s uuid=%s", id, name, uuid));
 				users.add(new User(id, name, uuid));
 			}
 		}
