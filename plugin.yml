@@ -34,3 +34,6 @@ commands:
         description: Teleports you to random location.
         usage: /<command>
         aliases: [pr, rand, rtp]
+    preset:
+        description: Sets existing warp in new location.
+        usage: /<command> <warp> [private|public]

@@ -26,7 +26,9 @@ public class PWarpCompeleter implements TabCompleter {
 		List<Warp> warps = wm.getMyWarps(p.getUniqueId().toString());
 		warps.addAll(wm.getWarpsByMemberUUID(p.getUniqueId().toString()));
 		
-		return warps.stream().map(v -> v.name()).distinct().sorted().collect(Collectors.toList());
+		return warps.stream().map(v -> v.name())
+		.filter(v -> args[0].isEmpty() || v.toLowerCase().startsWith(args[0].toLowerCase()))
+		.distinct().sorted().collect(Collectors.toList());
 	}
 
 }

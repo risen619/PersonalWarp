@@ -18,6 +18,7 @@ import com.github.risen619.Executors.PAddMember;
 import com.github.risen619.Executors.PDelWarp;
 import com.github.risen619.Executors.PMyWarps;
 import com.github.risen619.Executors.PRandom;
+import com.github.risen619.Executors.PReset;
 
 public class Main extends JavaPlugin
 {	
@@ -48,6 +49,8 @@ public class Main extends JavaPlugin
 		getCommand("pteleporter").setTabCompleter(new PToolCompleter());
 		
 		getCommand("prandom").setExecutor(new PRandom());
+
+		getCommand("preset").setExecutor(new PReset());
 		
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
 		getServer().getPluginManager().registerEvents(new TeleporterClickListenerer(), this);

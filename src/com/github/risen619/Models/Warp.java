@@ -108,7 +108,7 @@ public class Warp implements DatabaseCompatible
 	@Override
 	public String insertIntoTableSQL()
 	{
-		return String.format("insert or ignore into Warps " + 
+		return String.format("insert or replace into Warps " + 
 				"(name, owner, isPublic, location) " + 
 				"values (\"%s\", %d, %d, \"%s\");",
 				name, _owner, isPublic ? 1 : 0, loc);

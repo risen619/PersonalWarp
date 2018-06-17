@@ -30,6 +30,7 @@ public class Warps extends PersonalWarpCollection
 	
 	private void fetchWarps()
 	{
+		map.clear();
 		List<Warp> ws = dm.select(Warp.class);
 		for(Warp w : ws) map.put(w.id(), w);
 	}
