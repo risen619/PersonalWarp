@@ -17,6 +17,7 @@ import com.github.risen619.TabCompleters.PWarpCompeleter;
 import com.github.risen619.Executors.PAddMember;
 import com.github.risen619.Executors.PDelWarp;
 import com.github.risen619.Executors.PMyWarps;
+import com.github.risen619.Executors.PRandom;
 
 public class Main extends JavaPlugin
 {	
@@ -43,8 +44,10 @@ public class Main extends JavaPlugin
 		getCommand("pdelwarp").setExecutor(new PDelWarp());
 		getCommand("pdelwarp").setTabCompleter(new PDelWarpCompleter());
 		
-		getCommand("psign").setExecutor(new PTool());
-		getCommand("psign").setTabCompleter(new PToolCompleter());
+		getCommand("pteleporter").setExecutor(new PTool());
+		getCommand("pteleporter").setTabCompleter(new PToolCompleter());
+		
+		getCommand("prandom").setExecutor(new PRandom());
 		
 		getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
 		getServer().getPluginManager().registerEvents(new TeleporterClickListenerer(), this);

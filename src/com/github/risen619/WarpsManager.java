@@ -1,5 +1,9 @@
 package com.github.risen619;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,11 +32,36 @@ public class WarpsManager
 	private static WarpsManager instance = null;
 	private static Server server = null;
 	
+	private HashMap<String, String> serverProperties;
+	
 	private Warps warps;
 	private Users users;
 	private UserWarps userWarps;
 	
-	private WarpsManager() { }
+	private WarpsManager()
+	{
+		serverProperties = new HashMap<>();
+		try
+		{
+			List<String> props = Files.readAllLines(Paths.get("server.properties"));
+			for(String s : props)
+			{
+				if(s.matches(".*?=.+"))
+				{
+					String[] kv = s.split("=");
+					serverProperties.put(kv[0], kv[1]);
+				}
+			}
+		}
+		catch (IOException e) { System.out.println("Cannot read server.properties file!"); }
+	}
+	
+	public String getProperty(String name)
+	{
+		if(serverProperties.containsKey(name))
+			return serverProperties.get(name);
+		throw new IllegalArgumentException("Unknown propery \"" + name + "\"");
+	}
 	
 	private void setup()
 	{

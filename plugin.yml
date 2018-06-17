@@ -5,11 +5,11 @@ commands:
     pwarp:
         description: Teleports you to warp location.
         usage: /<command> <name> <player>
-        aliases: [p]
+        aliases: [p, warp]
     pwarps:
         description: Lists all public warps.
         usage: /<command>
-        aliases: [pall]
+        aliases: [pall, warps]
     pmywarps: 
         description: Lists all your warps.
         usage: /<command>
@@ -17,16 +17,20 @@ commands:
     psetwarp:
         description: Sets warp.
         usage: /<command> <name> [private|public]
-        aliases: [pset]
+        aliases: [pset, setwarp]
     pdelwarp:
         description: Deletes warp.
         usage: /<command> <name>
-        aliases: [pdel]
+        aliases: [pdel, delwarp]
     paddmember:
         description: Adds member to your warp.
         usage: /<command> <name> <player>
         aliases: [padd]
-    psign:
+    pteleporter:
         description: Gives you clickable sign, which will teleport you to your warp.
         usage: /<command> <name> [owner|members|all] <block>
-        aliases: [ps]
+        aliases: [pt, ps]
+    prandom:
+        description: Teleports you to random location.
+        usage: /<command>
+        aliases: [pr, rand, rtp]
