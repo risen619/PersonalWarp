@@ -88,25 +88,25 @@ public class DatabaseManager
 		executeUpdate(dropQuery);
 	}
 	
-	public List<DatabaseCompatible> select(Class<? extends DatabaseCompatible> c)
+	public <T extends DatabaseCompatible>List<T> select(Class<T> c)
 	{		
 		try
 		{
-			DatabaseCompatible dc = c.newInstance();
+			T t = c.newInstance();
 			Statement s;
 			try
 			{
 				s = connection.createStatement();
 				ResultSet rs = s.executeQuery(SqlHelpers.select(c));
-				return dc.fromResultSet(rs);
+				return t.fromResultSet(rs);
 			}
 			catch (SQLException e) {}
 		}
 		catch (InstantiationException | IllegalAccessException e) {}
-		return new ArrayList<DatabaseCompatible>();
+		return new ArrayList<T>();
 	}
 	
-	public List<DatabaseCompatible> select(Class<? extends DatabaseCompatible> c, Function<ResultSet, List<DatabaseCompatible>> processor)
+	public <T extends DatabaseCompatible>List<T> select(Class<T> c, Function<ResultSet, List<T>> processor)
 	{
 		try(Statement s = connection.createStatement())
 		{
@@ -114,10 +114,10 @@ public class DatabaseManager
 			return processor.apply(rs);
 		}
 		catch (SQLException e) {}
-		return new ArrayList<DatabaseCompatible>();
+		return new ArrayList<T>();
 	}
 	
-	public List<DatabaseCompatible> selectBy(Class<? extends DatabaseCompatible> c, String clause)
+	public <T extends DatabaseCompatible>List<T> selectBy(Class<T> c, String clause)
 	{
 		String selectQuery = SqlHelpers.select(c).replaceAll(";", "") + " where " + clause;
 		try
@@ -133,7 +133,7 @@ public class DatabaseManager
 			catch (SQLException e) {}
 		}
 		catch (InstantiationException | IllegalAccessException e) {}
-		return new ArrayList<DatabaseCompatible>();
+		return new ArrayList<T>();
 	}
 	
 	public void insert(String sql) { executeUpdate(sql); }

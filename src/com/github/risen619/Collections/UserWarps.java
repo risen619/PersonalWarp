@@ -1,19 +1,22 @@
 package com.github.risen619.Collections;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.risen619.Database.DatabaseCompatible;
-import com.github.risen619.Models.User;
 import com.github.risen619.Models.UserWarpModel;
 
-public class UserWarps extends PersonalWarpsCollections
+public class UserWarps extends PersonalWarpCollection
 {
 	private static UserWarps instance = null;
+	private HashMap<Integer, UserWarpModel> map;
 	
-	private List<UserWarpModel> userWarps = null;
-	
-	private UserWarps() { fetchUserWarps(); }
+	private UserWarps()
+	{
+		map = new HashMap<>();
+		fetchUserWarps();
+	}
 	
 	synchronized public static UserWarps getInstance()
 	{
@@ -21,28 +24,28 @@ public class UserWarps extends PersonalWarpsCollections
 			instance = new UserWarps();
 		return instance;
 	}
-	
-	public List<UserWarpModel> getUserWarps() { return userWarps; }
+
+	public Collection<UserWarpModel> get() { return map.values(); }
 	
 	private void fetchUserWarps()
 	{
-		List<DatabaseCompatible> dcs = dm.select(UserWarpModel.class);
-		userWarps = dcs.stream().map(dc -> ((UserWarpModel)dc)).collect(Collectors.toList());
+		List<UserWarpModel> uws = dm.select(UserWarpModel.class);
+		for(UserWarpModel uw : uws)
+			map.put(uw.id(), uw);
 	}
 	
 	public void refresh() { fetchUserWarps(); }
 	public void refresh(int id)
 	{
-		userWarps.removeIf(w -> w.getId() == id);
-		List<DatabaseCompatible> dcs = dm.selectBy(User.class, String.format("UserWarps.id=%d;", id));
-		userWarps.addAll(dcs.stream().map(dc -> (UserWarpModel)dc).collect(Collectors.toList()));
+		map.remove(id);
+		List<UserWarpModel> uws = dm.selectBy(UserWarpModel.class, String.format("UserWarps.id=%d;", id));
+		for(UserWarpModel uw : uws)
+			map.put(uw.id(), uw);
 	}
 	
 	public List<UserWarpModel> getMembersOfWarp(int warpId)
 	{
-		if(userWarps == null)
-			fetchUserWarps();
-		return userWarps.stream().filter(w -> w.getWarp() == warpId).collect(Collectors.toList());
+		return map.values().stream().filter(w -> w.warp() == warpId).collect(Collectors.toList());
 	}
 	
 	public void deleteWarpWithId(int id)
@@ -53,9 +56,7 @@ public class UserWarps extends PersonalWarpsCollections
 	
 	public boolean exists(int user, int warp)
 	{
-		if(userWarps == null)
-			fetchUserWarps();
-		return userWarps.stream().anyMatch(w -> w.getUser() == user && w.getWarp() == warp);
+		return map.values().stream().anyMatch(w -> w.user() == user && w.warp() == warp);
 	}
 	
 	public void add(UserWarpModel w)

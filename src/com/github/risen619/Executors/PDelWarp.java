@@ -21,6 +21,11 @@ public class PDelWarp implements CommandExecutor
 			wm.sendError(p, "Warp with such name does not exist");
 			return true;
 		}
+		if(!wm.getWarpByName(warpName).owner().uuid().equalsIgnoreCase(p.getUniqueId().toString()))
+		{
+			wm.sendError(p, "You don't have access to this warp!");
+			return true;
+		}
 		wm.deleteWarpByName(warpName);
 		wm.sendSuccess(p, String.format("Warp \"%s\" has been deleted!", warpName));
 		return true;

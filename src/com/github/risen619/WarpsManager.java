@@ -11,7 +11,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import com.github.risen619.Collections.PersonalWarpsCollections;
+import com.github.risen619.Collections.PersonalWarpCollection;
 import com.github.risen619.Collections.UserWarps;
 import com.github.risen619.Collections.Users;
 import com.github.risen619.Collections.Warps;
@@ -43,7 +43,7 @@ public class WarpsManager
 		dm.createTable(UserWarpModel.class);
 		dm.createTable(Teleporter.class);
 		
-		PersonalWarpsCollections.setDatabaseManager(dm);
+		PersonalWarpCollection.setDatabaseManager(dm);
 		users = Users.getInstance();
 		userWarps = UserWarps.getInstance();
 		warps = Warps.getInstance();
@@ -89,7 +89,7 @@ public class WarpsManager
 	public List<User> getMembersForWarp(int id)
 	{
 		return userWarps.getMembersOfWarp(id).stream()
-			.map(u -> users.getByID(u.getUser())).collect(Collectors.toList());
+			.map(u -> users.getByID(u.user())).collect(Collectors.toList());
 	};
 	
 	public static Server getServer() { return server; }

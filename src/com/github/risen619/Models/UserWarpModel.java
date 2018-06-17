@@ -36,9 +36,9 @@ public class UserWarpModel implements DatabaseCompatible
 		this.warp = warp;
 	}
 	
-	public int getId() { return id; }
-	public int getUser() { return user; }
-	public int getWarp() { return warp; }
+	public int id() { return id; }
+	public int user() { return user; }
+	public int warp() { return warp; }
 
 	@Deprecated
 	public static String createTableSQL() 
